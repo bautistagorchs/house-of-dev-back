@@ -6,8 +6,7 @@
   "scripts": {
     "start": "nodemon server.ts",
     "lint": "eslint - && echo `Linting completed without errors`",
-    "test": "test",
-    "prepare": "husky"
+    "test": "test"
   },
   "repository": {
     "type": "git",
@@ -32,7 +31,6 @@
     "@types/node": "^20.12.11",
     "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
-    "husky": "^9.0.11",
     "nodemon": "^3.1.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.4.5",
