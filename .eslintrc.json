@@ -22,7 +22,6 @@
   "rules": {
     "indent": ["warn", "tab"],
     "linebreak-style": ["warn", "unix"],
-    "quotes": ["warn", "double"],
     "semi": ["warn", "always"],
     "no-console": "warn",
     "camelcase": "error"
