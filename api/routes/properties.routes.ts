@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import Propertie from "../models/properties";
+import Propertie from "../models/properties.models";
 const router = express.Router();
 
 router.get("/all", (_req: Request, res: Response) => {
