@@ -2,6 +2,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import morgan from "morgan";
 import connectDb from "./api/config/db.config";
 import dotenv from "dotenv";
 import router from "./api/routes/index.routes";
@@ -13,6 +14,7 @@ const clientUrl = process.env.CLIENT_URL;
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(morgan(`dev`));
 app.use(cors({ origin: clientUrl, credentials: true }));
 app.use("/api", router);
 app.get("/", (_req, res) => {

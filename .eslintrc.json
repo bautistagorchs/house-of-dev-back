@@ -24,7 +24,7 @@
     "linebreak-style": ["warn", "unix"],
     "semi": ["warn", "always"],
     "no-console": "warn",
-    "camelcase": "error"
+    "camelcase": 0
   },
   "overrides": [
     {

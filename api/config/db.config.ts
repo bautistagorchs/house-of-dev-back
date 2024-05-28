@@ -4,12 +4,15 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const dbURI = process.env.MONGODB_URI || "your-default-mongodb-uri-here";
+const dbURI = process.env.MONGODB_URI;
 
 const connectDB = async () => {
+  if (!dbURI) return console.log("No valid connection string");
   try {
-    await mongoose.connect(dbURI, {});
-    console.log("Successfully connected to database");
+    const res = await mongoose.connect(dbURI);
+    console.log(
+      `Successfully connected to database ${res.connections[0].name} 📦`
+    );
   } catch (err) {
     console.error("Failed to connect to database", err);
     process.exit(1);

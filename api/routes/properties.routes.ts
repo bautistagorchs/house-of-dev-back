@@ -9,19 +9,13 @@ router.get("/all", (_req: Request, res: Response) => {
     .catch((err) => console.error(err));
 });
 
-router.get("/post", (_req: Request, res: Response) => {
-  const propertie = new Propertie({
-    address: "Abriata 888",
-    title: "Casa en venta",
-    description: "Esta es la descripcion",
-  });
-  propertie
-    .save()
-    .then((response) => {
-      res.send(response);
-    })
-    // eslint-disable-next-line no-console
-    .catch((err) => console.error(err));
+router.post("/post", async (req: Request, res: Response) => {
+  try {
+    const response = await Propertie.create(req.body);
+    res.status(200).send(response);
+  } catch (error) {
+    res.status(400).send(error);
+  }
 });
 
 router.get("/single", (_req: Request, res: Response) => {
