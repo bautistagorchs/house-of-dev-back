@@ -1,9 +1,20 @@
-import mongoose from "mongoose";
-const Schema = mongoose.Schema;
+import mongoose, { Document, Schema } from "mongoose";
+import bcrypt from "bcrypt";
 
 const required = [true, "Este campo es de tipo obligatorio"];
-const regex = /^[w-.]+@([w-]+.)+[w-]{2,4}$/;
+const regex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
+export interface IUser extends Document {
+  email: string;
+  name: string;
+  last_name: string;
+  phone_number: number;
+  password: string;
+  salt: string;
+  token: string;
+  is_confirmed: boolean;
+  is_admin: boolean;
+}
 const usersSchema = new Schema(
   {
     email: {
@@ -47,6 +58,22 @@ const usersSchema = new Schema(
   },
   { timestamps: true }
 );
+
+usersSchema.pre("save", async function (next) {
+  try {
+    const user = this as IUser;
+    if (!user.isModified("password")) {
+      return next();
+    }
+    const salt = await bcrypt.genSalt(10);
+    user.salt = salt;
+    const hash = await bcrypt.hash(user.password, salt);
+    user.password = hash;
+    next();
+  } catch (error) {
+    next(error as Error);
+  }
+});
 
 const User = mongoose.model("User", usersSchema);
 
