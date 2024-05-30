@@ -1,29 +1,29 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import { verifyToken } from "../utils/token.utils";
 
 export const authMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.header("Authorization")?.replace("Bearer ", "");
-
-  if (!token) {
+  const { myToken } = req.cookies;
+  if (!myToken) {
     return res
       .status(401)
-      .json({ message: "Access denied. No token provided." });
+      .json({ message: "Acceso denegado. No se proporcionó un token." });
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+    const decoded = verifyToken(myToken);
     req.user = decoded;
+
     return next();
   } catch (error) {
-    res.status(400).json({ message: "Invalid token" });
+    return res.status(403).json({ message: "Token inválido o no autorizado." });
   }
 };
 
-export const validateLogin = (
+export const checkExistanceOfEmailAndPassword = (
   req: Request,
   res: Response,
   next: NextFunction

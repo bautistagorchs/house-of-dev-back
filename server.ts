@@ -15,7 +15,13 @@ const clientUrl = process.env.CLIENT_URL;
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan(`dev`));
-app.use(cors({ origin: clientUrl, credentials: true }));
+app.use(
+  cors({
+    origin: clientUrl,
+    credentials: true,
+    allowedHeaders: `Content-Type,Authorization`,
+  })
+);
 app.use("/api", router);
 app.get("/", (_req, res) => {
   res.status(200).send("The server is up and healthy 😀");

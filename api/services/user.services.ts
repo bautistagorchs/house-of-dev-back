@@ -4,8 +4,7 @@ import bcrypt from "bcrypt";
 
 export const createUser = async (userData: userDataType) => {
   try {
-    const newUser = new User(userData);
-    await newUser.save();
+    const newUser = await User.create(userData);
     return newUser;
   } catch (error) {
     throw new Error("Error creating user");
@@ -19,6 +18,7 @@ export const getUserByEmail = async (email: string) => {
     throw new Error("Error fetching user");
   }
 };
+
 export const comparePasswords = async (
   password: string,
   hash: string

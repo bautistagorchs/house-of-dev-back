@@ -8,49 +8,47 @@ import { getUsers } from "../services/user.services";
 import { generateToken } from "../utils/token.utils";
 import { IUser } from "../models/users.models";
 
-export const registerUser = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const registerUser = async (req: Request, res: Response) => {
   try {
     const existingUser = await getUserByEmail(req.body.email);
-    if (existingUser) {
-      res.status(400).json({ message: "Email already in use" });
-      return;
-    }
+    if (existingUser)
+      return res.status(400).json({ message: "Email already in use" });
 
     const newUser = (await createUser(req.body)) as IUser;
     const token = generateToken(newUser);
 
-    res.status(201).json({ user: newUser, token });
+    return res.status(201).json({ user: newUser, token });
   } catch (error) {
-    res.status(500).json({ message: "Error registering user", error });
+    return res.status(500).json({ message: "Error registering user", error });
   }
 };
 
-export const loginUser = async (req: Request, res: Response): Promise<void> => {
+export const loginUser = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
   try {
-    const { email, password } = req.body;
-
     const user = await getUserByEmail(email);
-    if (!user) {
-      res.status(401).json({ message: "Invalid email or password" });
-      return;
-    }
+    if (!user)
+      return res.status(401).json({ message: "Invalid email or password" });
 
-    const isPasswordValid = await comparePasswords(
+    const passwordIsValid = await comparePasswords(
       password,
       (user as IUser).password
     );
-    if (!isPasswordValid) {
-      res.status(401).json({ message: "Invalid email or password" });
-      return;
-    }
+    if (!passwordIsValid)
+      return res.status(401).json({ message: "Invalid email or password" });
 
     const token = generateToken(user as IUser);
-    res.status(200).json({ user, token });
+
+    return res
+      .status(200)
+      .cookie("myToken", token, {
+        sameSite: "none",
+        httpOnly: true,
+        secure: true,
+      })
+      .json({ user });
   } catch (error) {
-    res.status(500).json({ message: "Error logging in", error });
+    return res.status(500).json({ message: "Error logging in", error });
   }
 };
 
@@ -64,4 +62,14 @@ export const getAllUsers = async (
   } catch (error) {
     res.status(500).json({ message: "Error retrieving users", error });
   }
+};
+
+export const getMe = (req: Request, res: Response) => {
+  const user = req.user;
+
+  if (!user) {
+    return res.status(404).json({ message: "Usuario no encontrado" });
+  }
+
+  return res.status(200).json({ user });
 };

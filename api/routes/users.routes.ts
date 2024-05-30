@@ -1,16 +1,22 @@
 import express from "express";
 import {
   getAllUsers,
+  getMe,
   loginUser,
   registerUser,
 } from "../controllers/user.controller";
-import { validateLogin } from "../middlewares/auth.middleware";
+import {
+  authMiddleware,
+  checkExistanceOfEmailAndPassword,
+} from "../middlewares/auth.middleware";
 const router = express.Router();
 
 router.post("/register", registerUser);
 
-router.post("/login", validateLogin, loginUser);
+router.post("/login", checkExistanceOfEmailAndPassword, loginUser);
 
 router.get("/all", getAllUsers);
+
+router.get("/me", authMiddleware, getMe);
 
 export default router;
