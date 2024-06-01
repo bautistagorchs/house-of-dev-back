@@ -29,7 +29,6 @@ export const loginUser = async (req: Request, res: Response) => {
     const user = await getUserByEmail(email);
     if (!user)
       return res.status(401).json({ message: "Invalid email or password" });
-
     const passwordIsValid = await comparePasswords(
       password,
       (user as IUser).password
@@ -38,7 +37,6 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Invalid email or password" });
 
     const token = generateToken(user as IUser);
-
     return res
       .status(200)
       .cookie("myToken", token, {
@@ -52,15 +50,16 @@ export const loginUser = async (req: Request, res: Response) => {
   }
 };
 
-export const getAllUsers = async (
-  _req: Request,
-  res: Response
-): Promise<void> => {
+export const controlLogout = async (req: Request, res: Response) => {
+  const { myToken } = req.cookies;
+
+  if (!myToken) return res.sendStatus(204);
+
   try {
-    const users = await getUsers();
-    res.status(200).json(users);
+    res.clearCookie("myToken");
+    return res.sendStatus(204);
   } catch (error) {
-    res.status(500).json({ message: "Error retrieving users", error });
+    return res.sendStatus(500);
   }
 };
 
@@ -72,4 +71,16 @@ export const getMe = (req: Request, res: Response) => {
   }
 
   return res.status(200).json({ user });
+};
+
+export const getAllUsers = async (
+  _req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const users = await getUsers();
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieving users", error });
+  }
 };
