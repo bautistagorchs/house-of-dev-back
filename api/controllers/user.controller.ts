@@ -69,7 +69,6 @@ export const getMe = (req: Request, res: Response) => {
   if (!user) {
     return res.status(404).json({ message: "Usuario no encontrado" });
   }
-
   return res.status(200).json({ user });
 };
 

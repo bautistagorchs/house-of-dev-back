@@ -22,7 +22,7 @@
   "rules": {
     "indent": ["warn", "tab"],
     "linebreak-style": ["warn", "unix"],
-    "semi": ["warn", "always"],
+    // "semi": ["warn", "always"],
     "no-console": "warn",
     "camelcase": 0
   },
