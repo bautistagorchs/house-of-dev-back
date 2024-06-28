@@ -5,6 +5,10 @@ const rule = [true, "Este campo es de tipo obligatorio"];
 
 const propertiesSchema = new Schema(
   {
+    _type: {
+      required: rule,
+      type: String,
+    },
     title: {
       required: rule,
       type: String,
@@ -25,25 +29,29 @@ const propertiesSchema = new Schema(
       type: String,
       required: rule,
       enum: {
-        values: ["venta", "alquiler"],
+        values: ["Venta", "Alquiler"],
         message: "El tipo de operacion debe ser venta o alquiler",
       },
     },
-    mts: {
+    total_meters: {
+      required: rule,
+      type: Number,
+    },
+    covered_meters: {
       required: rule,
       type: Number,
     },
     rooms: Number,
-    bathroom: Number,
+    bathrooms: Number,
     status: {
       type: String,
       trim: true,
       lowercase: true,
       enum: {
-        values: ["available", "closed", "on hold"],
-        message: "El estado debe ser available, closed o on hold",
+        values: ["disponible", "operacion cerrada", "en pausa"],
+        message: "El estado debe ser dispobible, operacion cerrada o en pausa",
       },
-      default: "available",
+      default: "disponible",
     },
   },
   { timestamps: true }

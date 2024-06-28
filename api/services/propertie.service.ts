@@ -4,7 +4,8 @@ import { handleError } from "../utils/dry.utils";
 
 export const createNewPropertie = async (houseInfo: PropertieDataType) => {
   try {
-    return await Propertie.create(houseInfo);
+    const propertie = await Propertie.create(houseInfo);
+    return propertie;
   } catch (error) {
     return handleError(error);
   }

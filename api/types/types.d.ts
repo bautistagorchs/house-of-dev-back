@@ -9,10 +9,12 @@ declare global {
 }
 
 export type userDataType = {
-  email: string;
   name: string;
   last_name: string;
+  phone_number: number;
+  email: string;
   password: string;
+  confirm_password: string;
   token?: string | null;
   is_admin: boolean;
   is_confirmed: boolean;

@@ -2,6 +2,23 @@ import User from "../models/users.models";
 import { userDataType } from "../types/types";
 import bcrypt from "bcrypt";
 
+export const checkFieldsCompletion = (user: userDataType) => {
+  const { name, last_name, phone_number, email, password, confirm_password } =
+    user;
+  if (
+    !name ||
+    !last_name ||
+    !phone_number ||
+    !email ||
+    !password ||
+    !confirm_password
+  )
+    throw new Error("Por favor complete todos los campos");
+  if (password !== confirm_password)
+    throw new Error("Las contraseñas no coinciden");
+  else return;
+};
+
 export const createUser = async (userData: userDataType) => {
   try {
     const newUser = await User.create(userData);

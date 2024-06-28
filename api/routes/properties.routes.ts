@@ -13,7 +13,7 @@ router.get("/all", getAll);
 
 router.get("/single-by-id/:id", getOnePropertieBy);
 
-router.post("/new-house", authMiddlewareAdmin, newPropertie);
+router.post("/new-propertie", authMiddlewareAdmin, newPropertie);
 
 router.delete("/remove/:id", authMiddlewareAdmin, removePropertie);
 

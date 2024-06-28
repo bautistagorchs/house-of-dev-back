@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import {
+  checkFieldsCompletion,
   comparePasswords,
   createUser,
   getUserByEmail,
@@ -9,7 +10,24 @@ import { generateToken } from "../utils/token.utils";
 import { IUser } from "../models/users.models";
 
 export const registerUser = async (req: Request, res: Response) => {
+  /*const { name, last_name, phone_number, email, password, confirm_password } =
+    req.body;
+  if (
+    !name ||
+    !last_name ||
+    !phone_number ||
+    !email ||
+    !password ||
+    !confirm_password
+  )
+    return res
+      .status(400)
+      .json({ message: "Por favor complete todos los campos" });
+  if (password !== confirm_password)
+    return res.status(400).json("Las contraseñas no coinciden");*/
+
   try {
+    checkFieldsCompletion(req.body);
     const existingUser = await getUserByEmail(req.body.email);
     if (existingUser)
       return res.status(400).json({ message: "Email already in use" });
@@ -19,7 +37,8 @@ export const registerUser = async (req: Request, res: Response) => {
 
     return res.status(201).json({ user: newUser, token });
   } catch (error) {
-    return res.status(500).json({ message: "Error registering user", error });
+    if (error instanceof Error) return res.status(500).send(error.message);
+    else return new Error("An unknown error occurred");
   }
 };
 
